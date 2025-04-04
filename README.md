@@ -7,7 +7,7 @@
 		 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # GP-RRC
-Gradual Patterns for Recommendation in Repeat Consumption context
+Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 
 ==========================================================================
 			Files
