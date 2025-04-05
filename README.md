@@ -6,14 +6,14 @@
 			Michaël Chirmeni Boujike
 		 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# GP-RRC
+# GP4RRSC
 Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 
 ==========================================================================
 			Files
 ==========================================================================
 		1.	AprioriTID.jar	
-		2.	GP-RRC.R
+		2.	GP4RRSC.R
 		3.  Param.csv
 		4.	Datasets.csv
 
@@ -22,7 +22,7 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 			Files description
 ==========================================================================
 		1.	"AprioriTID.jar" : modified java library of the AprioriTID algorithm;	
-		2.	"GP-RRC.R" : generate emergents gradual pattern algorithm taking into account the gradual threshold;
+		2.	"GP4RRSC.R" : generate emergents gradual pattern algorithm taking into account the gradual threshold;
 		3.  "Param.csv" : contains neessary parameters to run program
 			Example : <<minSupp>> <<minimum_size_of_gradual_pattern>> <<output_file>> <<K1>> <<K2>> <<column_separator_in_the_dataset>> <<windows>>
 			<<num_date>> <<num_product>> <<num_quantite>> <<num_user>> <<top-N>> <<isClust>> <<number_clust>> <<minDiscSeason>> <<OneToOneOrOneToMany>>
@@ -57,7 +57,7 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 		4.	Go to the command prompt and go to the directory containing the source code then type :
 			- "PATH\Rscript" <<File_R>> 
 		   Example :
-				- 	Rscript GP-RRC.R
+				- 	Rscript GP4RRSC.R
 ==========================================================================
 		Run (LINUX)
 ==========================================================================	
@@ -71,7 +71,7 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 			- "PATH\Rscript" <<File_R>>
 		
     Example :
-				- 	Rscript GP-RRC.R  
+				- 	Rscript GP4RRSC.R  
 				
 				
 				
