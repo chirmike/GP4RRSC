@@ -70,8 +70,8 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 		3.	Go to the command prompt and go to the directory containing the source code then type :
 			- "PATH\Rscript" <<File_R>>
 		
-    Example :
-				- 	Rscript GP4RRSC.R  
+    		Example :
+			- 	Rscript GP4RRSC.R  
 				
 				
 				
