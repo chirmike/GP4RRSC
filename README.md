@@ -14,7 +14,7 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 ==========================================================================
 		1.	AprioriTID.jar	
 		2.	GP4RRSC.R
-		3.  Param.csv
+		3.  	Param.csv
 		4.	Datasets.csv
 
 
@@ -23,7 +23,7 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 ==========================================================================
 		1.	"AprioriTID.jar" : modified java library of the AprioriTID algorithm;	
 		2.	"GP4RRSC.R" : generate emergents gradual pattern algorithm taking into account the gradual threshold;
-		3.  "Param.csv" : contains neessary parameters to run program
+		3.  	"Param.csv" : contains neessary parameters to run program
 			Example : <<minSupp>> <<minimum_size_of_gradual_pattern>> <<output_file>> <<K1>> <<K2>> <<column_separator_in_the_dataset>> <<windows>>
 			<<num_date>> <<num_product>> <<num_quantite>> <<num_user>> <<top-N>> <<isClust>> <<number_clust>> <<minDiscSeason>> <<OneToOneOrOneToMany>>
 			a. <<minSupp>> : allow to determine if gradual pattern is frequency;
