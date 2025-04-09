@@ -56,8 +56,8 @@ Gradual Patterns for Recommendation in Repeat and Seasonal Consumption context
 				*	create environment variable JAVA_HOME and put path until SDK (ex: JAVA_HOME ="C:\Program Files\Java\jdk1.8.0_171")
 		4.	Go to the command prompt and go to the directory containing the source code then type :
 			- "PATH\Rscript" <<File_R>> 
-		   Example :
-				- 	Rscript GP4RRSC.R
+		Example :
+			- 	Rscript GP4RRSC.R
 ==========================================================================
 		Run (LINUX)
 ==========================================================================	
