@@ -1,6 +1,6 @@
 #################### Importation des librairies a utiliser  ##########
 library(dtwclust)
-library(xts)#resutl1<- xts(dataset)
+library(xts)
 library(dtw)     
 library(dplyr)
 library(imputeTS)
@@ -8,15 +8,13 @@ library(ggplot2)
 library(labeling)
 library(factoextra)
 library(hash)
-#library(arules)
 
 #################### Reorganisation des differents elements dans leurs clusters correspondants  #############
-constructClusters<-function(dataset, number_cluster){
+constructClusters<-function(dataset){
   clustList<-list()
   dataset_2 <- as.ts(dataset)
   ##################################  Clusterisation  la fonction dtwclust::tscluster() ##################
-  cat(nrow(dataset_2), "\n")
-  pc_dtw_result <- tsclust(dataset_2, number_cluster, type = "partitional", seed = 8L,
+  pc_dtw_result <- tsclust(dataset_2, 3, type = "partitional", seed = 8L,
                            distance = "dtw_basic", centroid = "dba",
                            norm = "L2", window.size = 20L)
   
@@ -145,25 +143,17 @@ transformDataSet1 <- function(data, num_date, num_product, num_quantity){
 ###### FUNCTION TO COMPUTE RELEVANCE FOR EACH USER #########
 compute_Relevance <- function(data){
   data_mat <- as.matrix(data)
-  #vec_date <- vector()
   vec_product <- vector()
   vec_quantity <- vector()
   vec_user <- vector()
   
-  #vec_date <- data_mat[1,num_date] 
-  #vec_product <- data_mat[1,num_product]
-  #vec_quantity <- data_mat[1,num_quantity]
-  #vec_user <- data_mat[1,num_user]
-  
   # Récupère la liste des utilisateurs
   cat("----- Extract list of user------ \n")
   vec_user <-unique(data_mat[,num_user])
-  
-  
+   
   # Recupere la liste des produits
   cat("----- Extract list of products------ \n")
   vec_product <-unique(data_mat[,num_product])
-  
   
   # Init resulting matrix
   mat <-matrix(0, nrow = length(vec_user), ncol = (length(vec_product) +1))
@@ -320,11 +310,13 @@ EEP<-function(data_segmentation) {
     pos <- 3
   }
   cpt <- 2
-  for (i in 2:nrow(mat)) {
-    if (is.na(match(unlist(strsplit(mat[i,1],split = sepSeq))[pos], vec_seq))) {
-      vec_seq[cpt] <- unlist(strsplit(mat[i,1],split = sepSeq))[pos]
-      cpt <- cpt + 1
-    }
+  if(nrow(mat) > 2){
+	  for (i in 2:nrow(mat)) {
+		if (is.na(match(unlist(strsplit(mat[i,1],split = sepSeq))[pos], vec_seq))) {
+		  vec_seq[cpt] <- unlist(strsplit(mat[i,1],split = sepSeq))[pos]
+		  cpt <- cpt + 1
+		}
+	  }
   }
   
   #################### ----- SEASONAL THRESHOLD         ----- ####################
@@ -660,7 +652,7 @@ TrainSet <- function(dataset_2){
   SegmentedData <-list()
   
   if(isClust == 1){
-    cl<-constructClusters(dataset_2, number_cluster)
+    cl<-constructClusters(dataset_2)
     SegmentedData <- constructDonnee_Segmentees(dataset_2, cl)
   }else{
     SegmentedData[[1]] <- dataset_2
@@ -709,12 +701,12 @@ evaluate <- function(annee){
     relevance <- compute_Relevance(dataset_year_Season)
     produits <- relevance[[2]]
     rel <- relevance[[1]]
-	cat(nrow(rel), " ", ncol(rel), " ", length(rel), "\n")
-	#if(length(rel) > (length(produits)+1)){	
+	cat(nrow(rel), " ", ncol(rel), " ", length(rel), " Product : ", length(produits), "\n")
+	if(length(rel) > (length(produits)+1)){	
 		for (j in 1:nrow(rel)) {
 		  dictionnaire[paste(rel[j,1], sep = "$$", vec_saison[i])] <- decroissantOrder(produits, rel[j,2:ncol(rel)])
 		}
-	#}
+	}
   }
   lst <- list()
   lst[[1]] <- dictionnaire
@@ -762,6 +754,7 @@ globalEval <- function(dico_obtenu, list_result, users, top_N){
       if(!is.null(dico_obtenu[[as.character(paste(users[q],sep = "$$",saisons[p]))]])) {
         obtenu <- dico_obtenu[[as.character(paste(users[q],sep = "$$",saisons[p]))]]
         attendu <- dico_attendu[[as.character(paste(users[q],sep = "$$",saisons[p]))]]
+		#cat("Position  " ,length(mat_rel), " # ", length(list_result[[3]]), "\n")
         if(length(mat_rel) > (length(list_result[[3]])+1)){
           rel_user <- mat_rel[mat_rel[,1] == users[q], 2:ncol(mat_rel)]
           if(length(obtenu) != 0 && length(attendu) != 0){
@@ -797,6 +790,8 @@ globalEval <- function(dico_obtenu, list_result, users, top_N){
             DCG <- 0
             IDCG <- 0
             cpt <- cpt + 1 
+			write(paste(i, sep =" ", paste(tab_precision[cpt], sep = " ", paste(tab_rappel[cpt], sep = " ", tab_NDCG[cpt]))), file = "All_ResultsWith.txt", append = TRUE)
+
           }
         }
       } 
@@ -853,13 +848,13 @@ ExtractSequence <- function(dataset_init, numdate){
 }
 
 ############################### EXEC ############
-ParamsFile <- as.matrix(read.csv("ParamWith.csv", sep = "~"))
+ParamsFile <- as.matrix(read.csv("Param.csv", sep = "~"))
 #ParamsFile <- as.matrix(read.csv("ParamRosette.csv", sep = "~"))
 
 #------  Importation de la dataset a utiliser
-#dataset = read.csv("online_retail_II.csv", sep = ParamsFile[1,7])
+#dataset = read.csv("RediDatabase10.csv", sep = ParamsFile[1,7])
 #dataset = read.csv("TourOperatorSynthetique.csv", sep = ParamsFile[1,7])
-dataset = read.csv("TourOperatorSynthetique.csv", sep = ParamsFile[1,7])
+dataset = read.csv("Datasets.csv", sep = ParamsFile[1,7])
 
 #View(dataset)
 data <- as.data.frame(dataset)
@@ -919,14 +914,12 @@ for (i in 1: nrow(ParamsFile)) {
   # -- if (isClust) == 1 OUI else NON
   isClust <- as.numeric(linesElements[14])
   
-  # -- number of cluster
-  number_cluster <- as.numeric(linesElements[15])
-  
   # -- threshold saisonnier 0 => 1/2, 1 => 3/4 et 2 => 1
-  minDiscSeason <- as.numeric(linesElements[16])
+  minDiscSeason <- as.numeric(linesElements[15])
   
   # -- One to one or one to many 0 => one to many, 1 => one to one
-  OneToOneOrOneToMany <- as.numeric(linesElements[17])
+  OneToOneOrOneToMany <- as.numeric(linesElements[16])
+  
   
   #################### ----- PRINT PARAMETERS ----- ####################
   cat("\n")
@@ -958,8 +951,6 @@ for (i in 1: nrow(ParamsFile)) {
   cat("\n")
   # The code version is 1 if with cluster or 0 if which no cluster  
   cat("----- The code version is  ", isClust, "------ \n")
-  cat("\n")
-  cat("----- The number of cluster is  ", number_cluster, "------ \n")
   cat("\n")
   cat("----- The seasonal threshold is ",minDiscSeason, "------ \n")
   cat("\n")
